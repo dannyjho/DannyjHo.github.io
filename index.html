@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Danny Ho — Backend Engineer</title>
+<title id="pageTitle">Danny Ho — Backend Engineer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -37,7 +37,6 @@
 
   .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
 
-  /* subtle grid background */
   .grid-bg{
     position:fixed; inset:0; z-index:-1;
     background-image:
@@ -47,7 +46,34 @@
     mask-image: radial-gradient(ellipse 100% 60% at 50% 0%, black 30%, transparent 75%);
   }
 
-  /* ---------- HERO ---------- */
+  /* language toggle */
+  .lang-toggle{
+    position:fixed;
+    top:20px; right:24px;
+    z-index:20;
+    display:flex;
+    background:var(--bg-elev);
+    border:1px solid var(--line);
+    border-radius:7px;
+    overflow:hidden;
+    font-family:var(--mono);
+    font-size:12px;
+  }
+  .lang-toggle button{
+    background:transparent;
+    border:none;
+    color:var(--text-faint);
+    padding:8px 14px;
+    cursor:pointer;
+    letter-spacing:0.05em;
+    transition:color 0.15s, background 0.15s;
+  }
+  .lang-toggle button.active{
+    color:var(--bg);
+    background:var(--teal);
+  }
+  .lang-toggle button:not(.active):hover{color:var(--text);}
+
   header.hero{
     padding:96px 0 56px;
     border-bottom:1px solid var(--line);
@@ -77,7 +103,7 @@
     letter-spacing:-0.02em;
     margin-bottom:8px;
   }
-  h1 .en{
+  h1 .sub{
     font-family:var(--mono);
     font-weight:500;
     font-size:0.5em;
@@ -93,7 +119,6 @@
     margin-top:14px;
   }
 
-  /* status readout card — the signature element */
   .readout{
     margin-top:36px;
     background:var(--bg-elev);
@@ -112,7 +137,6 @@
     font-size:11.5px;
     letter-spacing:0.08em;
   }
-  .readout-titlebar span.tag{color:var(--text-faint);}
   .readout-body{padding:16px 18px;}
   .readout-row{
     display:grid;
@@ -124,10 +148,7 @@
   .readout-row .v{color:var(--text);}
   .status-active{color:var(--teal); font-weight:600;}
   .status-active::before{content:"● "; }
-  .status-archived{color:var(--text-faint);}
-  .status-archived::before{content:"○ "; }
 
-  /* contact strip */
   .contact-row{
     margin-top:28px;
     display:flex; flex-wrap:wrap; gap:22px;
@@ -137,7 +158,6 @@
   .contact-row a{color:var(--text-dim);}
   .contact-row a:hover{color:var(--amber);}
 
-  /* ---------- SECTIONS ---------- */
   section{padding:64px 0;}
   section + section{border-top:1px solid var(--line);}
   .section-head{
@@ -155,7 +175,6 @@
     letter-spacing:-0.01em;
   }
 
-  /* experience */
   .job{
     display:grid;
     grid-template-columns: 148px 1fr;
@@ -182,20 +201,12 @@
     font-size:13px;
   }
   .job li b{font-weight:600; color:var(--amber);}
-  .job .result{
-    color:var(--text-dim);
-    font-size:14px;
-    font-style:italic;
-    margin-top:-4px;
-    margin-bottom:14px;
-    padding-left:18px;
-  }
 
   @media (max-width:600px){
     .job{grid-template-columns:1fr; gap:8px;}
+    .lang-toggle{top:14px; right:14px;}
   }
 
-  /* skills */
   .skill-group{margin-bottom:22px;}
   .skill-group h3{
     font-family:var(--mono);
@@ -216,7 +227,6 @@
     background:var(--bg-elev);
   }
 
-  /* education */
   .edu-row{display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap;}
   .edu-row .school{font-size:16px; font-weight:600;}
   .edu-row .deg{color:var(--text-dim); font-size:14.5px;}
@@ -235,141 +245,266 @@
 
 <div class="grid-bg"></div>
 
+<div class="lang-toggle">
+  <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+  <button id="btn-zh" onclick="setLang('zh')">中文</button>
+</div>
+
 <div class="wrap">
 
   <header class="hero">
-    <div class="eyebrow"><span class="dot"></span> AVAILABLE FOR OPPORTUNITIES</div>
-    <h1>何榮庭<span class="en">Danny Ho — Backend Engineer</span></h1>
-    <p class="tagline">專注高併發後端系統與 IoT 平台架構。近期主導智慧家庭 IoT 平台的裝置通訊、身份驗證與 OTA 更新系統設計。</p>
+    <div class="eyebrow"><span class="dot"></span> <span data-i18n="badge"></span></div>
+    <h1 data-i18n-html="name"></h1>
+    <p class="tagline" data-i18n="tagline"></p>
 
     <div class="readout">
-      <div class="readout-titlebar"><span class="tag">● engineer.status</span></div>
+      <div class="readout-titlebar"><span>● engineer.status</span></div>
       <div class="readout-body">
-        <div class="readout-row"><div class="k">ROLE</div><div class="v">Backend / IoT Platform Engineer</div></div>
-        <div class="readout-row"><div class="k">STATUS</div><div class="v"><span class="status-active">ACTIVE</span> — RexLite, since 2026.03</div></div>
-        <div class="readout-row"><div class="k">STACK</div><div class="v">Java 21 · Spring Boot 4 · PostgreSQL · MQTT · Python</div></div>
-        <div class="readout-row"><div class="k">BASE</div><div class="v">台中市 · Remote 可</div></div>
+        <div class="readout-row"><div class="k" data-i18n="roleLabel"></div><div class="v" data-i18n="roleValue"></div></div>
+        <div class="readout-row"><div class="k" data-i18n="statusLabel"></div><div class="v"><span class="status-active" data-i18n="statusValue"></span></div></div>
+        <div class="readout-row"><div class="k" data-i18n="stackLabel"></div><div class="v">Java 21 · Spring Boot 4 · PostgreSQL · MQTT · Python</div></div>
+        <div class="readout-row"><div class="k" data-i18n="baseLabel"></div><div class="v" data-i18n="baseValue"></div></div>
       </div>
     </div>
 
     <div class="contact-row">
       <a href="mailto:zxcv86074@gmail.com">zxcv86074@gmail.com</a>
-      <span style="color:var(--text-faint)">台中市大里區</span>
+      <span style="color:var(--text-faint)" data-i18n="location"></span>
     </div>
   </header>
 
   <section id="experience">
-    <div class="section-head"><span class="idx">01</span><h2>Work Experience</h2></div>
+    <div class="section-head"><span class="idx">01</span><h2 data-i18n="secExp"></h2></div>
 
     <div class="job">
-      <div class="job-meta"><span class="range">2026.03 — Present</span>1y 4m</div>
+      <div class="job-meta"><span class="range">2026.03 — <span data-i18n="present"></span></span><span data-i18n="job1dur"></span></div>
       <div class="job-content">
-        <div class="job-title">後端工程師</div>
-        <div class="job-org">瑞司智慧整合股份有限公司(RexLite)</div>
-        <ul>
-          <li>負責 <b>MAXis</b> 智慧家庭 IoT 平台三大核心服務(SSO / Local API / Cloud API)後端開發，技術棧為 Java 21 / Spring Boot 4 / PostgreSQL。</li>
-          <li>從 0 到 1 設計 IPC 裝置端 <b>OTA 更新代理服務</b>(Python)，涵蓋批次更新、全有全無回滾機制、三重回報、私有映像檔認證與版本生命週期管理。</li>
-          <li>建置 Local API 與 <b>EMQX</b> 之間的雙向 MQTT 通訊，採 JWT + EC 私鑰簽章驗證，並實作重試與事件發布機制。</li>
-          <li>主導 <b>JWKS</b> 非對稱加密驗證機制跨服務遷移，設計服務間身份驗證架構。</li>
-          <li>完成與 <b>Home Assistant</b> 的裝置整合，設計特徵比對邏輯正確辨識多種裝置可操作項目。</li>
-        </ul>
+        <div class="job-title" data-i18n="job1title"></div>
+        <div class="job-org" data-i18n="job1org"></div>
+        <ul data-i18n-html="job1list"></ul>
       </div>
     </div>
 
     <div class="job">
-      <div class="job-meta"><span class="range">2023.08 — 2026.03</span>2y 7m</div>
+      <div class="job-meta"><span class="range">2023.08 — 2026.03</span><span data-i18n="job2dur"></span></div>
       <div class="job-content">
-        <div class="job-title">技術支援 / 後端技術研發</div>
-        <div class="job-org">協助家族品牌數位轉型・自主運作</div>
-        <ul>
-          <li>協助太太的金工品牌數位轉型，負責官網開發部署(WordPress、Cloudways)、金流串接(LinePay)、SEO 與數據追蹤優化(GA4)。</li>
-          <li>同步開發 <b>Spring Boot 3</b> 電商微服務 Demo，實作 RESTful API、JWT/OAuth2 驗證機制與設計模式(Strategy、Chain of Responsibility)，維持技術與業界標準接軌。</li>
-        </ul>
+        <div class="job-title" data-i18n="job2title"></div>
+        <div class="job-org" data-i18n="job2org"></div>
+        <ul data-i18n-html="job2list"></ul>
       </div>
     </div>
 
     <div class="job">
-      <div class="job-meta"><span class="range">2017.03 — 2023.08</span>6y 5m</div>
+      <div class="job-meta"><span class="range">2017.03 — 2023.08</span><span data-i18n="job3dur"></span></div>
       <div class="job-content">
-        <div class="job-title">後端工程師</div>
-        <div class="job-org">新博軟體開發股份有限公司</div>
-        <ul>
-          <li>開發並維護 100+ 款產品的核心後端系統，基於 <b>SmartFox</b> 框架實作模組化架構，支援高併發多人即時連線邏輯。</li>
-          <li>開發 <b>ETL</b> 資料管線，將交易數據匯出至 Oracle 與 ClickHouse，支援報表與營運數據查詢。</li>
-          <li>建置 <b>API 中介服務</b>，整合 10+ 家外部供應商，統一請求格式與錯誤處理流程，大幅減少新專案導入時程。</li>
-          <li>建立 <b>CI/CD</b> 流程(Drone CI、Docker、Ansible)，並開發自動化回歸測試框架(Cucumber)整合 Git Push 觸發。</li>
-          <li>擔任 <b>Product Owner</b>，帶領團隊於 4 個月內完成新產品上線交付。</li>
-        </ul>
+        <div class="job-title" data-i18n="job3title"></div>
+        <div class="job-org" data-i18n="job3org"></div>
+        <ul data-i18n-html="job3list"></ul>
       </div>
     </div>
 
     <div class="job">
-      <div class="job-meta"><span class="range">2014.09 — 2017.03</span>2y 7m</div>
+      <div class="job-meta"><span class="range">2014.09 — 2017.03</span><span data-i18n="job4dur"></span></div>
       <div class="job-content">
-        <div class="job-title">軟體工程師</div>
-        <div class="job-org">台灣新蛋股份有限公司</div>
-        <ul>
-          <li>利用 <b>Wireshark</b> 進行封包擷取與分析，驗證前後端交互資料正確性，提升跨層級問題排查效率。</li>
-          <li>使用 <b>Selenium</b> 建置自動化測試腳本，支援回歸測試與重複場景驗證。</li>
-        </ul>
+        <div class="job-title" data-i18n="job4title"></div>
+        <div class="job-org" data-i18n="job4org"></div>
+        <ul data-i18n-html="job4list"></ul>
       </div>
     </div>
   </section>
 
   <section id="skills">
-    <div class="section-head"><span class="idx">02</span><h2>Skills</h2></div>
+    <div class="section-head"><span class="idx">02</span><h2 data-i18n="secSkills"></h2></div>
 
     <div class="skill-group">
-      <h3>Backend / Language</h3>
+      <h3 data-i18n="skillBackend"></h3>
       <div class="tag-row">
         <span class="tag">Java 21</span><span class="tag">Spring Boot 4</span><span class="tag">Python</span>
         <span class="tag">RESTful API</span><span class="tag">Microservices</span>
       </div>
     </div>
     <div class="skill-group">
-      <h3>Data / Messaging</h3>
+      <h3 data-i18n="skillData"></h3>
       <div class="tag-row">
         <span class="tag">PostgreSQL</span><span class="tag">Oracle</span><span class="tag">ClickHouse</span>
         <span class="tag">MQTT</span><span class="tag">WebSocket</span>
       </div>
     </div>
     <div class="skill-group">
-      <h3>Auth / Security</h3>
+      <h3 data-i18n="skillAuth"></h3>
       <div class="tag-row">
         <span class="tag">JWT</span><span class="tag">OAuth2</span><span class="tag">JWKS</span>
       </div>
     </div>
     <div class="skill-group">
-      <h3>Infra / DevOps</h3>
+      <h3 data-i18n="skillInfra"></h3>
       <div class="tag-row">
         <span class="tag">Docker</span><span class="tag">GitLab CI/CD</span><span class="tag">Drone CI</span>
         <span class="tag">Ansible</span><span class="tag">Git Flow</span>
       </div>
     </div>
     <div class="skill-group">
-      <h3>IoT / Devices</h3>
+      <h3 data-i18n="skillIot"></h3>
       <div class="tag-row">
-        <span class="tag">Home Assistant</span><span class="tag">KNX</span><span class="tag">OTA Update Systems</span>
+        <span class="tag">Home Assistant</span><span class="tag">KNX</span><span class="tag" data-i18n="otaTag"></span>
       </div>
     </div>
   </section>
 
   <section id="education">
-    <div class="section-head"><span class="idx">03</span><h2>Education</h2></div>
+    <div class="section-head"><span class="idx">03</span><h2 data-i18n="secEdu"></h2></div>
     <div class="edu-row">
       <div>
-        <div class="school">國立高雄應用科技大學</div>
-        <div class="deg">資訊管理系・學士</div>
+        <div class="school" data-i18n="school"></div>
+        <div class="deg" data-i18n="degree"></div>
       </div>
       <div class="yrs">2009 — 2013</div>
     </div>
   </section>
 
-  <footer>
-    Last updated 2026.07 · Built with intent, not a template
-  </footer>
+  <footer data-i18n="footerText"></footer>
 
 </div>
+
+<script>
+const T = {
+  en: {
+    badge: "AVAILABLE FOR OPPORTUNITIES",
+    name: "Danny Ho<span class=\"sub\">何榮庭 — Backend Engineer</span>",
+    tagline: "Backend engineer focused on high-concurrency systems and IoT platform architecture. Recently led end-to-end backend design for a smart-home IoT platform — device communication, authentication, and OTA update systems.",
+    roleLabel: "ROLE", roleValue: "Backend / IoT Platform Engineer",
+    statusLabel: "STATUS", statusValue: "ACTIVE — RexLite, since 2026.03",
+    stackLabel: "STACK",
+    baseLabel: "BASE", baseValue: "Taichung, Taiwan · Remote OK",
+    location: "Dali District, Taichung",
+    present: "Present",
+    secExp: "Work Experience",
+    job1dur: "1y 4m",
+    job1title: "Backend Engineer",
+    job1org: "RexLite (瑞司智慧整合股份有限公司)",
+    job1list: `
+      <li>Backend development of <b>MAXis</b> smart-home IoT platform (SSO / Local API / Cloud API) — Java 21, Spring Boot 4, PostgreSQL.</li>
+      <li>Designed and built an <b>OTA update agent</b> for edge devices (Python) from scratch — batch updates, all-or-nothing rollback, triple-report confirmation, private registry auth, and version lifecycle management.</li>
+      <li>Built bidirectional <b>MQTT</b> communication with EMQX broker, JWT/EC-key signed authentication, retry and event-publishing mechanisms.</li>
+      <li>Led migration to <b>JWKS</b> asymmetric authentication across services; designed inter-service auth architecture.</li>
+      <li>Integrated <b>Home Assistant</b> device sync with custom feature-matching logic for multi-type device control.</li>
+    `,
+    job2dur: "2y 7m",
+    job2title: "Independent Technical Contributor",
+    job2org: "Family Business Support / Backend R&D",
+    job2list: `
+      <li>Supported family's metalworking brand's digital transformation — website development and deployment (WordPress, Cloudways), payment integration (LinePay), SEO/analytics (GA4).</li>
+      <li>Built a <b>Spring Boot 3</b> e-commerce microservice demo to stay current with backend standards — RESTful API, JWT/OAuth2, design patterns (Strategy, Chain of Responsibility).</li>
+    `,
+    job3dur: "6y 5m",
+    job3title: "Backend Engineer",
+    job3org: "Simbo Ltd.",
+    job3list: `
+      <li>Developed and maintained backend systems for 100+ titles using the <b>SmartFox</b> framework, with modular architecture supporting high-concurrency real-time interaction.</li>
+      <li>Built <b>ETL pipelines</b> exporting transaction data to Oracle and ClickHouse for reporting and analytics.</li>
+      <li>Built an <b>API middleware layer</b> integrating 10+ external vendors, standardizing request/error handling and reducing new-title integration time.</li>
+      <li>Established <b>CI/CD</b> pipelines (Drone CI, Docker, Ansible) and automated regression testing (Cucumber) triggered on Git push.</li>
+      <li>Served as <b>Product Owner</b>, leading cross-functional delivery of a new title within 4 months.</li>
+    `,
+    job4dur: "2y 7m",
+    job4title: "Software Engineer",
+    job4org: "Newegg Taiwan",
+    job4list: `
+      <li>Performed packet-level analysis (<b>Wireshark</b>) to verify front-/back-end data integrity across platforms.</li>
+      <li>Built automated test scripts (<b>Selenium</b>) supporting regression coverage.</li>
+    `,
+    secSkills: "Skills",
+    skillBackend: "Backend / Language",
+    skillData: "Data / Messaging",
+    skillAuth: "Auth / Security",
+    skillInfra: "Infra / DevOps",
+    skillIot: "IoT / Devices",
+    otaTag: "OTA Update Systems",
+    secEdu: "Education",
+    school: "National Kaohsiung University of Applied Sciences",
+    degree: "B.S., Information Management",
+    footerText: "Last updated 2026.07 · Built with intent, not a template"
+  },
+  zh: {
+    badge: "開放合作機會",
+    name: "何榮庭<span class=\"sub\">Danny Ho — Backend Engineer</span>",
+    tagline: "專注高併發後端系統與 IoT 平台架構。近期主導智慧家庭 IoT 平台的裝置通訊、身份驗證與 OTA 更新系統設計。",
+    roleLabel: "ROLE", roleValue: "Backend / IoT Platform Engineer",
+    statusLabel: "STATUS", statusValue: "ACTIVE — RexLite, since 2026.03",
+    stackLabel: "STACK",
+    baseLabel: "BASE", baseValue: "台中市 · Remote 可",
+    location: "台中市大里區",
+    present: "Present",
+    secExp: "Work Experience",
+    job1dur: "1y 4m",
+    job1title: "後端工程師",
+    job1org: "瑞司智慧整合股份有限公司(RexLite)",
+    job1list: `
+      <li>負責 <b>MAXis</b> 智慧家庭 IoT 平台三大核心服務(SSO / Local API / Cloud API)後端開發，技術棧為 Java 21 / Spring Boot 4 / PostgreSQL。</li>
+      <li>從 0 到 1 設計 IPC 裝置端 <b>OTA 更新代理服務</b>(Python)，涵蓋批次更新、全有全無回滾機制、三重回報、私有映像檔認證與版本生命週期管理。</li>
+      <li>建置 Local API 與 <b>EMQX</b> 之間的雙向 MQTT 通訊，採 JWT + EC 私鑰簽章驗證，並實作重試與事件發布機制。</li>
+      <li>主導 <b>JWKS</b> 非對稱加密驗證機制跨服務遷移，設計服務間身份驗證架構。</li>
+      <li>完成與 <b>Home Assistant</b> 的裝置整合，設計特徵比對邏輯正確辨識多種裝置可操作項目。</li>
+    `,
+    job2dur: "2y 7m",
+    job2title: "技術支援 / 後端技術研發",
+    job2org: "協助家族品牌數位轉型・自主運作",
+    job2list: `
+      <li>協助太太的金工品牌數位轉型，負責官網開發部署(WordPress、Cloudways)、金流串接(LinePay)、SEO 與數據追蹤優化(GA4)。</li>
+      <li>同步開發 <b>Spring Boot 3</b> 電商微服務 Demo，實作 RESTful API、JWT/OAuth2 驗證機制與設計模式(Strategy、Chain of Responsibility)，維持技術與業界標準接軌。</li>
+    `,
+    job3dur: "6y 5m",
+    job3title: "後端工程師",
+    job3org: "新博軟體開發股份有限公司",
+    job3list: `
+      <li>開發並維護 100+ 款產品的核心後端系統，基於 <b>SmartFox</b> 框架實作模組化架構，支援高併發多人即時連線邏輯。</li>
+      <li>開發 <b>ETL</b> 資料管線，將交易數據匯出至 Oracle 與 ClickHouse，支援報表與營運數據查詢。</li>
+      <li>建置 <b>API 中介服務</b>，整合 10+ 家外部供應商，統一請求格式與錯誤處理流程，大幅減少新專案導入時程。</li>
+      <li>建立 <b>CI/CD</b> 流程(Drone CI、Docker、Ansible)，並開發自動化回歸測試框架(Cucumber)整合 Git Push 觸發。</li>
+      <li>擔任 <b>Product Owner</b>，帶領團隊於 4 個月內完成新產品上線交付。</li>
+    `,
+    job4dur: "2y 7m",
+    job4title: "軟體工程師",
+    job4org: "台灣新蛋股份有限公司",
+    job4list: `
+      <li>利用 <b>Wireshark</b> 進行封包擷取與分析，驗證前後端交互資料正確性，提升跨層級問題排查效率。</li>
+      <li>使用 <b>Selenium</b> 建置自動化測試腳本，支援回歸測試與重複場景驗證。</li>
+    `,
+    secSkills: "專長",
+    skillBackend: "後端 / 語言",
+    skillData: "資料 / 通訊",
+    skillAuth: "驗證 / 資安",
+    skillInfra: "基礎設施 / DevOps",
+    skillIot: "IoT / 裝置",
+    otaTag: "OTA 更新系統",
+    secEdu: "學歷",
+    school: "國立高雄應用科技大學",
+    degree: "資訊管理系・學士",
+    footerText: "最後更新 2026.07 · Built with intent, not a template"
+  }
+};
+
+function setLang(lang){
+  document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.getElementById('btn-zh').classList.toggle('active', lang==='zh');
+  document.getElementById('pageTitle').textContent = lang==='zh' ? '何榮庭 — 後端工程師' : 'Danny Ho — Backend Engineer';
+
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-html');
+    if(T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+  });
+
+  try{ localStorage.setItem('resumeLang', lang); }catch(e){}
+}
+
+const savedLang = (function(){ try{ return localStorage.getItem('resumeLang'); }catch(e){ return null; } })();
+setLang(savedLang === 'zh' ? 'zh' : 'en');
+</script>
 
 </body>
 </html>
