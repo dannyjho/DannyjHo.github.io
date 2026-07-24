@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danny Ho — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10141a;
+    --bg-elev: #171d26;
+    --bg-elev-2: #1d2531;
+    --line: #2a323d;
+    --text: #e8ebef;
+    --text-dim: #8a97a8;
+    --text-faint: #5c6673;
+    --amber: #d9a441;
+    --teal: #4fa98c;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--amber); color:#10141a;}
+
+  a{color:var(--teal); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--amber); outline-offset:3px;}
+
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
+
+  /* subtle grid background */
+  .grid-bg{
+    position:fixed; inset:0; z-index:-1;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 100% 60% at 50% 0%, black 30%, transparent 75%);
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding:96px 0 56px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.12em;
+    color:var(--text-faint);
+    text-transform:uppercase;
+    margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 8px var(--teal);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.35;}
+  }
+  h1{
+    font-size:clamp(34px, 5vw, 46px);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin-bottom:8px;
+  }
+  h1 .en{
+    font-family:var(--mono);
+    font-weight:500;
+    font-size:0.5em;
+    color:var(--text-dim);
+    display:block;
+    margin-top:6px;
+    letter-spacing:0;
+  }
+  .tagline{
+    font-size:17px;
+    color:var(--text-dim);
+    max-width:520px;
+    margin-top:14px;
+  }
+
+  /* status readout card — the signature element */
+  .readout{
+    margin-top:36px;
+    background:var(--bg-elev);
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+    font-family:var(--mono);
+    font-size:13.5px;
+  }
+  .readout-titlebar{
+    display:flex; align-items:center; gap:8px;
+    padding:10px 16px;
+    border-bottom:1px solid var(--line);
+    background:var(--bg-elev-2);
+    color:var(--text-faint);
+    font-size:11.5px;
+    letter-spacing:0.08em;
+  }
+  .readout-titlebar span.tag{color:var(--text-faint);}
+  .readout-body{padding:16px 18px;}
+  .readout-row{
+    display:grid;
+    grid-template-columns: 96px 1fr;
+    gap:16px;
+    padding:5px 0;
+  }
+  .readout-row .k{color:var(--text-faint);}
+  .readout-row .v{color:var(--text);}
+  .status-active{color:var(--teal); font-weight:600;}
+  .status-active::before{content:"● "; }
+  .status-archived{color:var(--text-faint);}
+  .status-archived::before{content:"○ "; }
+
+  /* contact strip */
+  .contact-row{
+    margin-top:28px;
+    display:flex; flex-wrap:wrap; gap:22px;
+    font-family:var(--mono);
+    font-size:13.5px;
+  }
+  .contact-row a{color:var(--text-dim);}
+  .contact-row a:hover{color:var(--amber);}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:64px 0;}
+  section + section{border-top:1px solid var(--line);}
+  .section-head{
+    display:flex; align-items:baseline; gap:14px;
+    margin-bottom:36px;
+  }
+  .section-head .idx{
+    font-family:var(--mono);
+    color:var(--text-faint);
+    font-size:13px;
+  }
+  .section-head h2{
+    font-size:22px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+
+  /* experience */
+  .job{
+    display:grid;
+    grid-template-columns: 148px 1fr;
+    gap:24px;
+    padding:28px 0;
+  }
+  .job + .job{border-top:1px solid var(--line);}
+  .job-meta{font-family:var(--mono); font-size:12.5px; color:var(--text-faint); padding-top:3px;}
+  .job-meta .range{display:block; margin-bottom:6px; color:var(--text-dim);}
+  .job-title{font-size:17px; font-weight:600; margin-bottom:2px;}
+  .job-org{font-size:14.5px; color:var(--text-dim); margin-bottom:14px;}
+  .job ul{list-style:none;}
+  .job li{
+    position:relative;
+    padding-left:18px;
+    margin-bottom:10px;
+    font-size:15px;
+    color:var(--text);
+  }
+  .job li::before{
+    content:"→";
+    position:absolute; left:0; top:0;
+    color:var(--text-faint);
+    font-size:13px;
+  }
+  .job li b{font-weight:600; color:var(--amber);}
+  .job .result{
+    color:var(--text-dim);
+    font-size:14px;
+    font-style:italic;
+    margin-top:-4px;
+    margin-bottom:14px;
+    padding-left:18px;
+  }
+
+  @media (max-width:600px){
+    .job{grid-template-columns:1fr; gap:8px;}
+  }
+
+  /* skills */
+  .skill-group{margin-bottom:22px;}
+  .skill-group h3{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:12px;
+  }
+  .tag-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .tag{
+    font-family:var(--mono);
+    font-size:13px;
+    padding:5px 11px;
+    border:1px solid var(--line);
+    border-radius:5px;
+    color:var(--text-dim);
+    background:var(--bg-elev);
+  }
+
+  /* education */
+  .edu-row{display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap;}
+  .edu-row .school{font-size:16px; font-weight:600;}
+  .edu-row .deg{color:var(--text-dim); font-size:14.5px;}
+  .edu-row .yrs{font-family:var(--mono); font-size:13px; color:var(--text-faint);}
+
+  footer{
+    padding:48px 0 80px;
+    text-align:center;
+    color:var(--text-faint);
+    font-family:var(--mono);
+    font-size:12.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow"><span class="dot"></span> AVAILABLE FOR OPPORTUNITIES</div>
+    <h1>何榮庭<span class="en">Danny Ho — Backend Engineer</span></h1>
+    <p class="tagline">專注高併發後端系統與 IoT 平台架構。近期主導智慧家庭 IoT 平台的裝置通訊、身份驗證與 OTA 更新系統設計。</p>
+
+    <div class="readout">
+      <div class="readout-titlebar"><span class="tag">● engineer.status</span></div>
+      <div class="readout-body">
+        <div class="readout-row"><div class="k">ROLE</div><div class="v">Backend / IoT Platform Engineer</div></div>
+        <div class="readout-row"><div class="k">STATUS</div><div class="v"><span class="status-active">ACTIVE</span> — RexLite, since 2026.03</div></div>
+        <div class="readout-row"><div class="k">STACK</div><div class="v">Java 21 · Spring Boot 4 · PostgreSQL · MQTT · Python</div></div>
+        <div class="readout-row"><div class="k">BASE</div><div class="v">台中市 · Remote 可</div></div>
+      </div>
+    </div>
+
+    <div class="contact-row">
+      <a href="mailto:zxcv86074@gmail.com">zxcv86074@gmail.com</a>
+      <span style="color:var(--text-faint)">台中市大里區</span>
+    </div>
+  </header>
+
+  <section id="experience">
+    <div class="section-head"><span class="idx">01</span><h2>Work Experience</h2></div>
+
+    <div class="job">
+      <div class="job-meta"><span class="range">2026.03 — Present</span>1y 4m</div>
+      <div class="job-content">
+        <div class="job-title">後端工程師</div>
+        <div class="job-org">瑞司智慧整合股份有限公司(RexLite)</div>
+        <ul>
+          <li>負責 <b>MAXis</b> 智慧家庭 IoT 平台三大核心服務(SSO / Local API / Cloud API)後端開發，技術棧為 Java 21 / Spring Boot 4 / PostgreSQL。</li>
+          <li>從 0 到 1 設計 IPC 裝置端 <b>OTA 更新代理服務</b>(Python)，涵蓋批次更新、全有全無回滾機制、三重回報、私有映像檔認證與版本生命週期管理。</li>
+          <li>建置 Local API 與 <b>EMQX</b> 之間的雙向 MQTT 通訊，採 JWT + EC 私鑰簽章驗證，並實作重試與事件發布機制。</li>
+          <li>主導 <b>JWKS</b> 非對稱加密驗證機制跨服務遷移，設計服務間身份驗證架構。</li>
+          <li>完成與 <b>Home Assistant</b> 的裝置整合，設計特徵比對邏輯正確辨識多種裝置可操作項目。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-meta"><span class="range">2023.08 — 2026.03</span>2y 7m</div>
+      <div class="job-content">
+        <div class="job-title">技術支援 / 後端技術研發</div>
+        <div class="job-org">協助家族品牌數位轉型・自主運作</div>
+        <ul>
+          <li>協助太太的金工品牌數位轉型，負責官網開發部署(WordPress、Cloudways)、金流串接(LinePay)、SEO 與數據追蹤優化(GA4)。</li>
+          <li>同步開發 <b>Spring Boot 3</b> 電商微服務 Demo，實作 RESTful API、JWT/OAuth2 驗證機制與設計模式(Strategy、Chain of Responsibility)，維持技術與業界標準接軌。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-meta"><span class="range">2017.03 — 2023.08</span>6y 5m</div>
+      <div class="job-content">
+        <div class="job-title">後端工程師</div>
+        <div class="job-org">新博軟體開發股份有限公司</div>
+        <ul>
+          <li>開發並維護 100+ 款產品的核心後端系統，基於 <b>SmartFox</b> 框架實作模組化架構，支援高併發多人即時連線邏輯。</li>
+          <li>開發 <b>ETL</b> 資料管線，將交易數據匯出至 Oracle 與 ClickHouse，支援報表與營運數據查詢。</li>
+          <li>建置 <b>API 中介服務</b>，整合 10+ 家外部供應商，統一請求格式與錯誤處理流程，大幅減少新專案導入時程。</li>
+          <li>建立 <b>CI/CD</b> 流程(Drone CI、Docker、Ansible)，並開發自動化回歸測試框架(Cucumber)整合 Git Push 觸發。</li>
+          <li>擔任 <b>Product Owner</b>，帶領團隊於 4 個月內完成新產品上線交付。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-meta"><span class="range">2014.09 — 2017.03</span>2y 7m</div>
+      <div class="job-content">
+        <div class="job-title">軟體工程師</div>
+        <div class="job-org">台灣新蛋股份有限公司</div>
+        <ul>
+          <li>利用 <b>Wireshark</b> 進行封包擷取與分析，驗證前後端交互資料正確性，提升跨層級問題排查效率。</li>
+          <li>使用 <b>Selenium</b> 建置自動化測試腳本，支援回歸測試與重複場景驗證。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="section-head"><span class="idx">02</span><h2>Skills</h2></div>
+
+    <div class="skill-group">
+      <h3>Backend / Language</h3>
+      <div class="tag-row">
+        <span class="tag">Java 21</span><span class="tag">Spring Boot 4</span><span class="tag">Python</span>
+        <span class="tag">RESTful API</span><span class="tag">Microservices</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Data / Messaging</h3>
+      <div class="tag-row">
+        <span class="tag">PostgreSQL</span><span class="tag">Oracle</span><span class="tag">ClickHouse</span>
+        <span class="tag">MQTT</span><span class="tag">WebSocket</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Auth / Security</h3>
+      <div class="tag-row">
+        <span class="tag">JWT</span><span class="tag">OAuth2</span><span class="tag">JWKS</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Infra / DevOps</h3>
+      <div class="tag-row">
+        <span class="tag">Docker</span><span class="tag">GitLab CI/CD</span><span class="tag">Drone CI</span>
+        <span class="tag">Ansible</span><span class="tag">Git Flow</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>IoT / Devices</h3>
+      <div class="tag-row">
+        <span class="tag">Home Assistant</span><span class="tag">KNX</span><span class="tag">OTA Update Systems</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="section-head"><span class="idx">03</span><h2>Education</h2></div>
+    <div class="edu-row">
+      <div>
+        <div class="school">國立高雄應用科技大學</div>
+        <div class="deg">資訊管理系・學士</div>
+      </div>
+      <div class="yrs">2009 — 2013</div>
+    </div>
+  </section>
+
+  <footer>
+    Last updated 2026.07 · Built with intent, not a template
+  </footer>
+
+</div>
+
+</body>
+</html>
